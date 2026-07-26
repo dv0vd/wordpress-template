@@ -1,0 +1,13 @@
+.env
+.htpasswd
+*.crt
+*.key
+*.csr
+*.tar
+*.log*
+*.dump
+deployment/configs/nginx/nginx.conf
+deployment/configs/fail2ban/jail.local
+deployment/configs/iptables/iptables.sh
+src/*
+!.gitkeep

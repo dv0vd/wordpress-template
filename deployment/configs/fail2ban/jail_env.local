@@ -1,0 +1,42 @@
+[DEFAULT]
+findtime          = 10m
+maxretry          = 5
+bantime           = 1h
+bantime.increment = true
+bantime.factor    = 2
+bantime.maxtime   = 1w
+bantime.rndtime   = 10m
+nginx_access_log  = /root/wordpress/deployment/data/nginx/logs/access.log
+nginx_error_log   = /root/wordpress/deployment/data/nginx/logs/error.log
+banaction         = %(banaction_allports)s
+ignoreip          = $FAIL2BAN_IGNORE_IPS
+
+[sshd]
+enabled = true
+backend = systemd
+mode    = aggressive
+
+[nginx-http-auth]
+enabled = true
+mode    = aggressive
+logpath = %(nginx_access_log)s
+
+[nginx-limit-req]
+enabled = true
+logpath = %(nginx_error_log)s
+
+[nginx-botsearch]
+enabled  = true
+logpath  = %(nginx_access_log)s
+
+[nginx-bad-request]
+enabled = true
+logpath = %(nginx_access_log)s
+
+[nginx-not-found]
+enabled  = false
+logpath  = %(nginx_access_log)s
+
+[nginx-redirected]
+enabled  = false
+logpath  = %(nginx_access_log)s

@@ -1,0 +1,5 @@
+#!/bin/bash
+export PATH=$PATH:/root/.local/bin
+cd /root/wordpress
+make on-startup > /var/log/on-startup.log
+exit 0
