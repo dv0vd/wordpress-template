@@ -12,4 +12,5 @@ Template for deploying a WordPress website with MariaDB, Nginx, Fail2ban, SSH ha
 - wordpress_7.0.2-php8.5-fpm.tar
 - mariadb_12.1.2.tar
 - nginx_1.27.3.tar
+- certbot_5.3.1.tar
 7) Run the initialization script `chmod +x ./deployment/init.sh && ./deployment/init.sh`.
