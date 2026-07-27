@@ -1,5 +1,9 @@
 certbot-issue:
+	- $(MAKE) podman-load-images
+	- $(MAKE) podman-create-network
+	- $(MAKE) start-nginx-certbot
 	- $(MAKE) certbot-issue-website
+	- $(MAKE) stop-nginx
 
 certbot-issue-website:
 	- podman rm certbot

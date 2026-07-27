@@ -64,6 +64,24 @@ start-nginx:
 	--cgroup-parent=/podman-group.slice \
 	docker.io/nginx:1.27.3
 
+start-nginx-certbot:
+	- bash -c "set -a; . .env; set +a; envsubst '\$$BASE_URL' < ./deployment/configs/nginx/certbot_env.conf > ./deployment/configs/nginx/nginx.conf"
+	-@ rm ./deployment/data/nginx/logs/access.log
+	-@ rm ./deployment/data/nginx/logs/error.log
+	- podman run \
+	-d \
+	--name nginx \
+	--network podman_network \
+	-v ./deployment/configs/nginx/nginx.conf:/etc/nginx/nginx.conf:ro \
+	-v ./deployment/data/nginx/logs:/var/log/nginx \
+	-v ./deployment/data/letsencrypt/acme:/app/letsencrypt/acme:ro \
+	-v ./src/:/var/www/html \
+	--restart unless-stopped \
+	--memory=${NGINX_MEMORY} \
+	--cpus=${NGINX_CPUS} \
+	--cgroup-parent=/podman-group.slice \
+	docker.io/nginx:1.27.3
+
 start-nginx-local:
 	- bash -c "set -a; . .env; set +a; envsubst '\$$BASE_URL' < ./deployment/configs/nginx/local_env.conf > ./deployment/configs/nginx/nginx.conf"
 	-@ rm ./deployment/data/nginx/logs/access.log
