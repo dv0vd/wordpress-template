@@ -24,6 +24,7 @@ configure_ssh() {
   touch /etc/ssh/sshd_config.d/00-wordpress.conf
   echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config.d/00-wordpress.conf
   echo Port $SSH_PORT >> /etc/ssh/sshd_config.d/00-wordpress.conf
+  chmod 600 /root/.ssh/config
   log "SSH successfully generated"
 }
 
@@ -56,10 +57,15 @@ install_packages() {
   apt update
   apt upgrade -y
   apt install -y make
+  apt install -y curl
   apt install -y git
+  apt install -y apache2-utils # for nginx basic auth
   apt install -y fail2ban
+  apt install -y podman
   apt install -y iptables
   apt install -y ipset # for iptables
+  apt install -y gettext # for envsubst
+  apt install dnsutils # for dig
   log "Packages successfully installed"
 }
 
