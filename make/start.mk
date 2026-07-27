@@ -43,7 +43,7 @@ start-db:
 	--memory=${DB_MEMORY} \
 	--cpus=${DB_CPUS} \
 	--cgroup-parent=/podman-group.slice \
-	docker.io/mariadb:12.1.2
+	docker.io/mariadb:11.8.8
 
 start-nginx:
 	- bash -c "set -a; . .env; set +a; envsubst '\$$BASE_URL' < ./deployment/configs/nginx/nginx_env.conf > ./deployment/configs/nginx/nginx.conf"
