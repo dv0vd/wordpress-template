@@ -58,6 +58,8 @@ start-nginx:
 	-v ./deployment/data/letsencrypt/acme:/app/letsencrypt/acme:ro \
 	-v ./deployment/data/letsencrypt/data:/app/letsencrypt/certificates:ro \
 	-v ./src/:/var/www/html \
+	-p 80:80 \
+	-p 443:443 \
 	--restart unless-stopped \
 	--memory=${NGINX_MEMORY} \
 	--cpus=${NGINX_CPUS} \
@@ -76,6 +78,7 @@ start-nginx-certbot:
 	-v ./deployment/data/nginx/logs:/var/log/nginx \
 	-v ./deployment/data/letsencrypt/acme:/app/letsencrypt/acme:ro \
 	-v ./src/:/var/www/html \
+	-p 80:80 \
 	--restart unless-stopped \
 	--memory=${NGINX_MEMORY} \
 	--cpus=${NGINX_CPUS} \
