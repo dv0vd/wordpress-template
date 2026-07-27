@@ -7,7 +7,8 @@ on-startup:
 	- shutdown -r 0:00
 	- $(MAKE) fail2ban-configure
 	- $(MAKE) start-fail2ban
-	- $(MAKE) certbot-renew
 	- $(MAKE) logs-clear
 	- rm -rf /var/tmp/*
 	- systemctl set-property podman-group.slice MemoryMax=${PODMAN_MEMORY_LIMIT} CPUQuota=${PODMAN_CPUS}
+	- $(MAKE) restart
+	- $(MAKE) certbot-renew
