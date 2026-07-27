@@ -9,5 +9,6 @@
 deployment/configs/nginx/nginx.conf
 deployment/configs/fail2ban/jail.local
 deployment/configs/iptables/iptables.sh
+deployment/data/mariadb/data/
 src/*
 !.gitkeep

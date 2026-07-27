@@ -28,6 +28,7 @@ start-wordpress:
 	docker.io/wordpress:7.0.2-php8.5-fpm
 
 start-db:
+	- mkdir -p ./deployment/data/mariadb/data
 	- podman run \
 	-d \
 	--name db \
