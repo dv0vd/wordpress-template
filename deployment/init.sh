@@ -13,9 +13,14 @@ configure_fail2ban() {
 
 configure_nginx() {
   log "Configuring nginx..."
-  htpasswd -cb /root/wordpress/deployment/configs/nginx/.htpasswd $NGINX_BASIC_AUTH_USERNAME $NGINX_BASIC_AUTH_PASSWORD &&
-  make -C /root/wordpress certbot-issue
+  htpasswd -cb /root/wordpress/deployment/configs/nginx/.htpasswd $NGINX_BASIC_AUTH_USERNAME $NGINX_BASIC_AUTH_PASSWORD
   log "Nginx successfully configured"
+}
+
+issue_certificates() {
+  log "Issuing Let's Encrypt certificates..."
+  make -C /root/wordpress certbot-issue
+  log "Let's Encrypt certificates successfully issued"
 }
 
 configure_ssh() {
@@ -101,5 +106,6 @@ install_packages
 configure_ssh
 configure_podman
 configure_nginx
+issue_certificates
 configure_fail2ban
 finish
