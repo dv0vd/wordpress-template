@@ -24,7 +24,6 @@ configure_ssh() {
   touch /etc/ssh/sshd_config.d/00-wordpress.conf
   echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config.d/00-wordpress.conf
   echo Port $SSH_PORT >> /etc/ssh/sshd_config.d/00-wordpress.conf
-  chmod 600 /root/.ssh/config
   log "SSH successfully generated"
 }
 
