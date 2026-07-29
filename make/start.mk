@@ -47,6 +47,7 @@ start-db:
 
 start-nginx:
 	- bash -c "set -a; . .env; set +a; envsubst '\$$BASE_URL' < ./deployment/configs/nginx/nginx_env.conf > ./deployment/configs/nginx/nginx.conf"
+	- bash -c "set -a; . .env; set +a; if [ -n \"\$$OLD_BASE_URL\" ]; then envsubst '\$$BASE_URL \$$OLD_BASE_URL' < ./deployment/configs/nginx/old-site-redirect_env.conf > ./deployment/configs/nginx/old-site-redirect.conf; else printf '' > ./deployment/configs/nginx/old-site-redirect.conf; fi"
 	-@ rm ./deployment/data/nginx/logs/access.log
 	-@ rm ./deployment/data/nginx/logs/error.log
 	- podman run \
@@ -54,6 +55,7 @@ start-nginx:
 	--name nginx \
 	--network podman_network \
 	-v ./deployment/configs/nginx/nginx.conf:/etc/nginx/nginx.conf:ro \
+	-v ./deployment/configs/nginx/old-site-redirect.conf:/etc/nginx/conf.d/old-site-redirect.conf:ro \
 	-v ./deployment/configs/nginx/.htpasswd:/etc/nginx/.htpasswd:ro \
 	-v ./deployment/data/nginx/logs:/var/log/nginx \
 	-v ./deployment/data/letsencrypt/acme:/app/letsencrypt/acme:ro \

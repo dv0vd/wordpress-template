@@ -1,3 +1,5 @@
+CERTBOT_OLD_DOMAINS = $(if $(OLD_BASE_URL),-d $(OLD_BASE_URL) -d www.$(OLD_BASE_URL),)
+
 certbot-issue:
 	- $(MAKE) podman-load-images
 	- $(MAKE) podman-create-network
@@ -18,6 +20,7 @@ certbot-issue-website:
 		--webroot-path=/app/acme \
 		-d ${BASE_URL} \
 		-d www.${BASE_URL} \
+		${CERTBOT_OLD_DOMAINS} \
 		--email postmaster@${BASE_URL} \
 		--agree-tos \
 		--no-eff-email
