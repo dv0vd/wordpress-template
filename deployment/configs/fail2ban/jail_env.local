@@ -14,6 +14,7 @@ ignoreip          = $FAIL2BAN_IGNORE_IPS
 [sshd]
 enabled = true
 backend = systemd
+bantime = -1
 mode    = aggressive
 
 [nginx-http-auth]
