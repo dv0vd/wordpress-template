@@ -129,6 +129,7 @@ start-easyappointments:
 	--name easyappointments \
 	-v ./deployment/data/easyappointments/data:/var/www/html/storage \
 	-v ./deployment/configs/easyappointments/remoteip.conf:/etc/apache2/conf-enabled/zz-easyappointments-remoteip.conf:ro \
+	-v ./deployment/configs/easyappointments/security_headers.php:/var/www/html/application/hooks/security_headers.php:ro \
 	-e BASE_URL=https://${EA_URL}.${BASE_URL} \
 	-e DB_HOST=easyappointments-db \
 	-e DB_NAME=${EA_DB_NAME} \
