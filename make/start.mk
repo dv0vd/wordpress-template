@@ -143,9 +143,9 @@ start-easyappointments:
 	-e MAIL_SMTP_USER=${SMTP_USER} \
 	-e MAIL_SMTP_PASS=${SMTP_PASS} \
 	-e MAIL_SMTP_PORT=${SMTP_PORT} \
-	-e MAIL_FROM_NAME=${SMTP_FROM_ADDRESS} \
+	-e MAIL_FROM_NAME=${SMTP_FROM_NAME} \
 	-e MAIL_FROM_ADDRESS=${SMTP_FROM_ADDRESS} \
-	-e MAIL_REPLY_TO_ADDRESS=${SMTP_FROM_NAME} \
+	-e MAIL_REPLY_TO_ADDRESS=${SMTP_FROM_ADDRESS} \
 	-p 127.0.0.1:${EA_HOST_PORT}:80 \
 	--network podman_network \
 	--restart unless-stopped \
