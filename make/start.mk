@@ -123,6 +123,7 @@ start-fail2ban:
 	systemctl start fail2ban
 
 start-easyappointments:
+	- chmod -R a+rwX ./deployment/data/easyappointments/data
 	- podman run \
 	-d \
 	--name easyappointments \
