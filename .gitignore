@@ -9,6 +9,7 @@
 deployment/configs/nginx/nginx.conf
 deployment/configs/nginx/certbot.conf
 deployment/configs/nginx/old-site-redirect.conf
+deployment/configs/nginx/easyappointments.conf
 deployment/configs/fail2ban/jail.local
 deployment/configs/iptables/iptables.sh
 deployment/data/mariadb/data/

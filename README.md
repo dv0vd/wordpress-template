@@ -13,4 +13,12 @@ Template for deploying a WordPress website with MariaDB, Nginx, Fail2ban, SSH ha
 - mariadb_12.1.2.tar
 - nginx_1.27.3.tar
 - certbot_5.3.1.tar
+- alextselegidis-easyappointments_1.6.0.tar (optional, only when `EA_ENABLE=true`)
 7) Run the initialization script `chmod +x ./deployment/init.sh && ./deployment/init.sh`.
+
+## Old website redirect (optional)
+Redirects requests of a previously used domain to the current one. `OLD_BASE_URL` — old host without scheme, e.g. `old-example.com`. The redirect works only if the variable is specified.
+
+## Easy!Appointments (optional)
+Online booking module, disabled by default. Set `EA_ENABLE=true` in `.env` to create and start it.
+

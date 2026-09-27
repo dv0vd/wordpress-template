@@ -48,3 +48,11 @@ help:
 	@echo ${GREEN}enter-db'                                '${WHITE}— enter database container${RESET}
 	@echo ${GREEN}enter-nginx'                             '${WHITE}— enter nginx container${RESET}
 	@echo ${GREEN}enter-wordpress'                         '${WHITE}— enter wordpress container${RESET}
+	@echo ${GREEN}start-easyappointments'                  '${WHITE}— start Easy!Appointments${RESET}
+	@echo ${GREEN}start-easyappointments-db'               '${WHITE}— start Easy!Appointments database${RESET}
+	@echo ${GREEN}stop-easyappointments'                   '${WHITE}— stop Easy!Appointments${RESET}
+	@echo ${GREEN}stop-easyappointments-db'                '${WHITE}— stop Easy!Appointments database${RESET}
+	@echo ${GREEN}restart-easyappointments'                '${WHITE}— restart Easy!Appointments${RESET}
+	@echo ${GREEN}restart-easyappointments-db'             '${WHITE}— restart Easy!Appointments database${RESET}
+	@echo ${GREEN}logs-easyappointments'                   '${WHITE}— get Easy!Appointments logs${RESET}
+	@echo ${GREEN}logs-easyappointments-db'                '${WHITE}— get Easy!Appointments database logs${RESET}

@@ -21,3 +21,7 @@ restart-db: stop-db start-db
 
 restart-fail2ban: 
 	systemctl restart fail2ban
+
+restart-easyappointments: stop-easyappointments start-easyappointments
+
+restart-easyappointments-db: stop-easyappointments-db start-easyappointments-db
