@@ -135,6 +135,17 @@ start-easyappointments:
 	-e DB_NAME=${EA_DB_NAME} \
 	-e DB_USERNAME=${EA_DB_USER} \
 	-e DB_PASSWORD=${EA_DB_PASSWORD} \
+	-e MAIL_PROTOCOL=smtp \
+	-e MAIL_SMTP_DEBUG=0 \
+	-e MAIL_SMTP_AUTH=1 \
+	-e MAIL_SMTP_CRYPTO=${SMTP_CRYPTO} \
+	-e MAIL_SMTP_HOST=${SMTP_HOST} \
+	-e MAIL_SMTP_USER=${SMTP_USER} \
+	-e MAIL_SMTP_PASS=${SMTP_PASS} \
+	-e MAIL_SMTP_PORT=${SMTP_PORT} \
+	-e MAIL_FROM_NAME=${SMTP_FROM_ADDRESS} \
+	-e MAIL_FROM_ADDRESS=${SMTP_FROM_ADDRESS} \
+	-e MAIL_REPLY_TO_ADDRESS=${SMTP_FROM_NAME} \
 	-p 127.0.0.1:${EA_HOST_PORT}:80 \
 	--network podman_network \
 	--restart unless-stopped \
