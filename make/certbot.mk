@@ -70,3 +70,14 @@ certbot-renew:
 		-v ./deployment/data/letsencrypt/data:/etc/letsencrypt \
 		-v ./deployment/data/letsencrypt/acme:/app/acme \
 		docker.io/certbot/certbot:v5.3.1 renew
+
+certbot-delete-certificate:
+	- podman rm certbot
+	podman run \
+		--rm \
+		--name certbot \
+		--network podman_network \
+		-v ./deployment/data/letsencrypt/data:/etc/letsencrypt \
+		-v ./deployment/data/letsencrypt/acme:/app/acme \
+		docker.io/certbot/certbot:v5.3.1 delete \
+		--cert-name ${URL}

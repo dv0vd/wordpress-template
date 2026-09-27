@@ -45,6 +45,7 @@ help:
 	@echo ${GREEN}certbot-issue'                           '${WHITE}— issue certbot certificates${RESET}
 	@echo ${GREEN}certbot-issue-website'                   '${WHITE}— issue website certbot certificates${RESET}
 	@echo ${GREEN}certbot-renew'                           '${WHITE}— renew certbot certificates${RESET}
+	@echo ${GREEN}certbot-delete-certificate'              '${WHITE}— delete certbot certificate by URL${RESET}
 	@echo ${GREEN}enter-db'                                '${WHITE}— enter database container${RESET}
 	@echo ${GREEN}enter-nginx'                             '${WHITE}— enter nginx container${RESET}
 	@echo ${GREEN}enter-wordpress'                         '${WHITE}— enter wordpress container${RESET}
