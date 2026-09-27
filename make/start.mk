@@ -3,8 +3,8 @@ start:
 	- $(MAKE) start-wordpress
 	- $(MAKE) start-nginx
 ifeq ($(EA_ENABLE),true)
-	- $(MAKE) start-easyappointments
 	- $(MAKE) start-easyappointments-db
+	- $(MAKE) start-easyappointments
 endif
 
 start-local:
@@ -12,8 +12,8 @@ start-local:
 	- $(MAKE) start-wordpress
 	- $(MAKE) start-nginx-local
 ifeq ($(EA_ENABLE),true)
-	- $(MAKE) start-easyappointments
 	- $(MAKE) start-easyappointments-db
+	- $(MAKE) start-easyappointments
 endif
 
 start-wordpress:
