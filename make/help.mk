@@ -59,3 +59,7 @@ help:
 	@echo ${GREEN}restart-easyappointments-db'             '${WHITE}— restart Easy!Appointments database${RESET}
 	@echo ${GREEN}logs-easyappointments'                   '${WHITE}— get Easy!Appointments logs${RESET}
 	@echo ${GREEN}logs-easyappointments-db'                '${WHITE}— get Easy!Appointments database logs${RESET}
+	@echo ${GREEN}easyappointments-backup-db'               '${WHITE}— dump Easy!Appointments database${RESET}
+	@echo ${GREEN}easyappointments-restore-db'              '${WHITE}— restore Easy!Appointments database from dump${RESET}
+	@echo ${GREEN}easyappointments-backup-to-storage-vps'   '${WHITE}— back up Easy!Appointments database to storage VPS${RESET}
+	@echo ${GREEN}easyappointments-restore-from-storage-vps' '${WHITE}— download Easy!Appointments database dump from storage VPS${RESET}

@@ -46,6 +46,16 @@ configure_podman() {
   log "Podman successfully configured"
 }
 
+configure_rclone() {
+  log "Configuring rclone..."
+  mkdir -p /root/.config/rclone
+  touch /root/.config/rclone/rclone.conf
+  envsubst < ./deployment/configs/rclone/rclone_env.conf > /root/.config/rclone/rclone.conf
+  ssh-keygen -R $RCLONE_HOST || true
+  ssh-keyscan -p $RCLONE_PORT $RCLONE_HOST >> /root/.ssh/known_hosts
+  log "Rclone successfully configured"
+}
+
 finish() {
   log "Configuring rc.local autostart..."
   rm /etc/rc.local -f
@@ -105,6 +115,11 @@ set_timezone
 install_packages
 configure_ssh
 configure_podman
+if [ "$BACKUP_ENABLED" = "true" ]; then
+  configure_rclone
+else
+  log "Backup is disabled. Skipping rclone configuration"
+fi
 configure_nginx
 issue_certificates
 configure_fail2ban

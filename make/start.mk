@@ -2,6 +2,10 @@ start:
 	- $(MAKE) start-db
 	- $(MAKE) start-wordpress
 	- $(MAKE) start-nginx
+ifeq ($(BACKUP_ENABLED),true)
+	- $(MAKE) easyappointments-backup-db
+	- $(MAKE) easyappointments-backup-to-storage-vps
+endif
 ifeq ($(EA_ENABLE),true)
 	- $(MAKE) start-easyappointments-db
 	- $(MAKE) start-easyappointments
@@ -159,6 +163,7 @@ start-easyappointments-db:
 	-d \
 	--name easyappointments-db \
 	-v ./deployment/data/easyappointments/mariadb/data:/var/lib/mysql \
+	-v ./deployment/data/easyappointments/mariadb/backups:/backups \
 	-e MARIADB_DATABASE=${EA_DB_NAME} \
 	-e MARIADB_USER=${EA_DB_USER} \
 	-e MARIADB_PASSWORD=${EA_DB_PASSWORD} \

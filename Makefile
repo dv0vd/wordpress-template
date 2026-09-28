@@ -16,3 +16,4 @@ include ./make/podman.mk
 include ./make/hooks.mk
 include ./make/common.mk
 include ./make/iptables.mk
+include ./make/easyappointments.mk
