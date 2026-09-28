@@ -27,3 +27,9 @@ logs-wordpress:
 
 logs-db:
 	podman logs -f db
+
+logs-easyappointments:
+	podman logs -f easyappointments
+
+logs-easyappointments-db:
+	podman logs -f easyappointments-db

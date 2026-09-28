@@ -45,6 +45,21 @@ help:
 	@echo ${GREEN}certbot-issue'                           '${WHITE}— issue certbot certificates${RESET}
 	@echo ${GREEN}certbot-issue-website'                   '${WHITE}— issue website certbot certificates${RESET}
 	@echo ${GREEN}certbot-renew'                           '${WHITE}— renew certbot certificates${RESET}
+	@echo ${GREEN}certbot-delete-certificate'              '${WHITE}— delete certbot certificate by URL${RESET}
 	@echo ${GREEN}enter-db'                                '${WHITE}— enter database container${RESET}
 	@echo ${GREEN}enter-nginx'                             '${WHITE}— enter nginx container${RESET}
 	@echo ${GREEN}enter-wordpress'                         '${WHITE}— enter wordpress container${RESET}
+	@echo ${GREEN}enter-easyappointments'                  '${WHITE}— enter easyappointments container${RESET}
+	@echo ${GREEN}enter-easyappointments-db'               '${WHITE}— enter easyappointments database container${RESET}
+	@echo ${GREEN}start-easyappointments'                  '${WHITE}— start Easy!Appointments${RESET}
+	@echo ${GREEN}start-easyappointments-db'               '${WHITE}— start Easy!Appointments database${RESET}
+	@echo ${GREEN}stop-easyappointments'                   '${WHITE}— stop Easy!Appointments${RESET}
+	@echo ${GREEN}stop-easyappointments-db'                '${WHITE}— stop Easy!Appointments database${RESET}
+	@echo ${GREEN}restart-easyappointments'                '${WHITE}— restart Easy!Appointments${RESET}
+	@echo ${GREEN}restart-easyappointments-db'             '${WHITE}— restart Easy!Appointments database${RESET}
+	@echo ${GREEN}logs-easyappointments'                   '${WHITE}— get Easy!Appointments logs${RESET}
+	@echo ${GREEN}logs-easyappointments-db'                '${WHITE}— get Easy!Appointments database logs${RESET}
+	@echo ${GREEN}easyappointments-backup-db'               '${WHITE}— dump Easy!Appointments database${RESET}
+	@echo ${GREEN}easyappointments-restore-db'              '${WHITE}— restore Easy!Appointments database from dump${RESET}
+	@echo ${GREEN}easyappointments-backup-to-storage-vps'   '${WHITE}— back up Easy!Appointments database to storage VPS${RESET}
+	@echo ${GREEN}easyappointments-restore-from-storage-vps' '${WHITE}— download Easy!Appointments database dump from storage VPS${RESET}

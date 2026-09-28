@@ -2,11 +2,23 @@ start:
 	- $(MAKE) start-db
 	- $(MAKE) start-wordpress
 	- $(MAKE) start-nginx
+ifeq ($(BACKUP_ENABLED),true)
+	- $(MAKE) easyappointments-backup-db
+	- $(MAKE) easyappointments-backup-to-storage-vps
+endif
+ifeq ($(EA_ENABLE),true)
+	- $(MAKE) start-easyappointments-db
+	- $(MAKE) start-easyappointments
+endif
 
 start-local:
 	- $(MAKE) start-db
 	- $(MAKE) start-wordpress
 	- $(MAKE) start-nginx-local
+ifeq ($(EA_ENABLE),true)
+	- $(MAKE) start-easyappointments-db
+	- $(MAKE) start-easyappointments
+endif
 
 start-wordpress:
 	- chmod a+rwX ./src
@@ -48,6 +60,7 @@ start-db:
 start-nginx:
 	- bash -c "set -a; . .env; set +a; envsubst '\$$BASE_URL' < ./deployment/configs/nginx/nginx_env.conf > ./deployment/configs/nginx/nginx.conf"
 	- bash -c "set -a; . .env; set +a; if [ -n \"\$$OLD_BASE_URL\" ]; then envsubst '\$$BASE_URL \$$OLD_BASE_URL' < ./deployment/configs/nginx/old-site-redirect_env.conf > ./deployment/configs/nginx/old-site-redirect.conf; else printf '' > ./deployment/configs/nginx/old-site-redirect.conf; fi"
+	- bash -c "set -a; . .env; set +a; if [ \"\$$EA_ENABLE\" = \"true\" ]; then envsubst '\$$EA_URL \$$BASE_URL' < ./deployment/configs/nginx/easyappointments_env.conf > ./deployment/configs/nginx/easyappointments.conf; else printf '' > ./deployment/configs/nginx/easyappointments.conf; fi"
 	-@ rm ./deployment/data/nginx/logs/access.log
 	-@ rm ./deployment/data/nginx/logs/error.log
 	- podman run \
@@ -56,6 +69,7 @@ start-nginx:
 	--network podman_network \
 	-v ./deployment/configs/nginx/nginx.conf:/etc/nginx/nginx.conf:ro \
 	-v ./deployment/configs/nginx/old-site-redirect.conf:/etc/nginx/conf.d/old-site-redirect.conf:ro \
+	-v ./deployment/configs/nginx/easyappointments.conf:/etc/nginx/conf.d/easyappointments.conf:ro \
 	-v ./deployment/configs/nginx/.htpasswd:/etc/nginx/.htpasswd:ro \
 	-v ./deployment/data/nginx/logs:/var/log/nginx \
 	-v ./deployment/data/letsencrypt/acme:/app/letsencrypt/acme:ro \
@@ -90,6 +104,7 @@ start-nginx-certbot:
 
 start-nginx-local:
 	- bash -c "set -a; . .env; set +a; envsubst '\$$BASE_URL' < ./deployment/configs/nginx/local_env.conf > ./deployment/configs/nginx/nginx.conf"
+	- bash -c "set -a; . .env; set +a; if [ \"\$$EA_ENABLE\" = \"true\" ]; then envsubst '\$$EA_URL \$$BASE_URL' < ./deployment/configs/nginx/easyappointments_local_env.conf > ./deployment/configs/nginx/easyappointments.conf; else printf '' > ./deployment/configs/nginx/easyappointments.conf; fi"
 	-@ rm ./deployment/data/nginx/logs/access.log
 	-@ rm ./deployment/data/nginx/logs/error.log
 	- podman run \
@@ -98,6 +113,7 @@ start-nginx-local:
 	--network podman_network \
 	-v ./deployment/configs/nginx/nginx.conf:/etc/nginx/nginx.conf:ro \
 	-v ./deployment/configs/nginx/.htpasswd:/etc/nginx/.htpasswd:ro \
+	-v ./deployment/configs/nginx/easyappointments.conf:/etc/nginx/conf.d/easyappointments.conf:ro \
 	-v ./deployment/configs/nginx:/deployment/nginx:ro \
 	-v ./deployment/data/nginx/logs:/var/log/nginx \
 	-v ./src/:/var/www/html \
@@ -109,3 +125,53 @@ start-nginx-local:
 
 start-fail2ban:
 	systemctl start fail2ban
+
+start-easyappointments:
+	- chmod -R a+rwX ./deployment/data/easyappointments/data
+	- podman run \
+	-d \
+	--name easyappointments \
+	-v ./deployment/data/easyappointments/data:/var/www/html/storage \
+	-v ./deployment/configs/easyappointments/remoteip.conf:/etc/apache2/conf-enabled/zz-easyappointments-remoteip.conf:ro \
+	-v ./deployment/configs/easyappointments/security_headers.php:/var/www/html/application/hooks/security_headers.php:ro \
+	-e BASE_URL=https://${EA_URL}.${BASE_URL} \
+	-e DB_HOST=easyappointments-db \
+	-e DB_NAME=${EA_DB_NAME} \
+	-e DB_USERNAME=${EA_DB_USER} \
+	-e DB_PASSWORD=${EA_DB_PASSWORD} \
+	-e MAIL_PROTOCOL=smtp \
+	-e MAIL_SMTP_DEBUG=0 \
+	-e MAIL_SMTP_AUTH=1 \
+	-e MAIL_SMTP_CRYPTO=${SMTP_CRYPTO} \
+	-e MAIL_SMTP_HOST=${SMTP_HOST} \
+	-e MAIL_SMTP_USER=${SMTP_USER} \
+	-e MAIL_SMTP_PASS=${SMTP_PASS} \
+	-e MAIL_SMTP_PORT=${SMTP_PORT} \
+	-e MAIL_FROM_NAME=${SMTP_FROM_NAME} \
+	-e MAIL_FROM_ADDRESS=${SMTP_FROM_ADDRESS} \
+	-e MAIL_REPLY_TO_ADDRESS=${SMTP_FROM_ADDRESS} \
+	-p 127.0.0.1:${EA_HOST_PORT}:80 \
+	--network podman_network \
+	--restart unless-stopped \
+	--memory=${EA_MEMORY} \
+	--cpus=${EA_CPUS} \
+	--cgroup-parent=/podman-group.slice \
+	docker.io/alextselegidis/easyappointments:1.6.0
+
+start-easyappointments-db:
+	- podman run \
+	-d \
+	--name easyappointments-db \
+	-v ./deployment/data/easyappointments/mariadb/data:/var/lib/mysql \
+	-v ./deployment/data/easyappointments/mariadb/backups:/backups \
+	-e MARIADB_DATABASE=${EA_DB_NAME} \
+	-e MARIADB_USER=${EA_DB_USER} \
+	-e MARIADB_PASSWORD=${EA_DB_PASSWORD} \
+	-e MARIADB_ROOT_PASSWORD=${EA_DB_ROOT_PASSWORD} \
+	-p 127.0.0.1:${EA_DB_HOST_PORT}:3306 \
+	--network podman_network \
+	--restart unless-stopped \
+	--memory=${EA_DB_MEMORY} \
+	--cpus=${EA_DB_CPUS} \
+	--cgroup-parent=/podman-group.slice \
+	docker.io/mariadb:12.1.2

@@ -4,6 +4,9 @@ certbot-issue:
 	- $(MAKE) start-nginx-certbot
 	- $(MAKE) certbot-issue-website
 	- $(MAKE) certbot-issue-old-website
+ifeq ($(EA_ENABLE),true)
+	- $(MAKE) certbot-issue-easyappointments
+endif
 	- $(MAKE) stop-nginx
 
 certbot-issue-website:
@@ -42,6 +45,22 @@ certbot-issue-old-website:
 			--no-eff-email; \
 	fi
 
+certbot-issue-easyappointments:
+	- podman rm certbot
+	podman run \
+		--rm \
+		--name certbot \
+		--network podman_network \
+		-v ./deployment/data/letsencrypt/data:/etc/letsencrypt \
+		-v ./deployment/data/letsencrypt/acme:/app/acme \
+		docker.io/certbot/certbot:v5.3.1 certonly \
+		--webroot \
+		--webroot-path=/app/acme \
+		-d ${EA_URL}.${BASE_URL} \
+		--email postmaster@${BASE_URL} \
+		--agree-tos \
+		--no-eff-email
+
 certbot-renew:
 	- podman rm certbot
 	podman run \
@@ -51,3 +70,14 @@ certbot-renew:
 		-v ./deployment/data/letsencrypt/data:/etc/letsencrypt \
 		-v ./deployment/data/letsencrypt/acme:/app/acme \
 		docker.io/certbot/certbot:v5.3.1 renew
+
+certbot-delete-certificate:
+	- podman rm certbot
+	podman run \
+		--rm \
+		--name certbot \
+		--network podman_network \
+		-v ./deployment/data/letsencrypt/data:/etc/letsencrypt \
+		-v ./deployment/data/letsencrypt/acme:/app/acme \
+		docker.io/certbot/certbot:v5.3.1 delete \
+		--cert-name ${URL}
