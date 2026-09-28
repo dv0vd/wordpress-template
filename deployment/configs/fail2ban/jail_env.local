@@ -41,3 +41,9 @@ logpath  = %(nginx_access_log)s
 [nginx-redirected]
 enabled  = false
 logpath  = %(nginx_access_log)s
+
+[nginx-http-auth]
+enabled = true
+mode    = aggressive
+bantime = -1
+logpath = %(nginx_access_log)s
