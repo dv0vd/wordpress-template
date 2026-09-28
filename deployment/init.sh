@@ -77,6 +77,7 @@ install_packages() {
   apt install -y fail2ban
   apt install -y podman
   apt install -y iptables
+  apt install -y rclone
   apt install -y ipset # for iptables
   apt install -y gettext # for envsubst
   apt install dnsutils # for dig
