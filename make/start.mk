@@ -37,7 +37,7 @@ start-wordpress:
 	--memory=${WORDPRESS_MEMORY} \
 	--cpus=${WORDPRESS_CPUS} \
 	--cgroup-parent=/podman-group.slice \
-	docker.io/wordpress:7.0.2-php8.5-fpm
+	docker.io/wordpress:7.1.4-php8.5-fpm
 
 start-db:
 	- mkdir -p ./deployment/data/mariadb/data
