@@ -1,8 +1,5 @@
 restart:
 	- $(MAKE) stop
-	- $(MAKE) podman-cleanup
-	- $(MAKE) podman-load-images
-	- $(MAKE) podman-create-network
 	- $(MAKE) start
 
 restart-local:

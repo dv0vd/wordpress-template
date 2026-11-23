@@ -1,12 +1,3 @@
-stop:
-	- $(MAKE) stop-nginx
-	- $(MAKE) stop-wordpress
-	- $(MAKE) stop-db
-ifeq ($(EA_ENABLE),true)
-	- $(MAKE) stop-easyappointments
-	- $(MAKE) stop-easyappointments-db
-endif
-
 stop-nginx:
 	- podman stop nginx
 	- podman rm nginx

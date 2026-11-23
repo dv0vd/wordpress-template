@@ -1,25 +1,3 @@
-start:
-	- $(MAKE) start-db
-	- $(MAKE) start-wordpress
-	- $(MAKE) start-nginx
-ifeq ($(BACKUP_ENABLED),true)
-	- $(MAKE) easyappointments-backup-db
-	- $(MAKE) easyappointments-backup-to-storage-vps
-endif
-ifeq ($(EA_ENABLE),true)
-	- $(MAKE) start-easyappointments-db
-	- $(MAKE) start-easyappointments
-endif
-
-start-local:
-	- $(MAKE) start-db
-	- $(MAKE) start-wordpress
-	- $(MAKE) start-nginx-local
-ifeq ($(EA_ENABLE),true)
-	- $(MAKE) start-easyappointments-db
-	- $(MAKE) start-easyappointments
-endif
-
 start-wordpress:
 	- chmod a+rwX ./src
 	- podman run \
@@ -37,7 +15,7 @@ start-wordpress:
 	--memory=${WORDPRESS_MEMORY} \
 	--cpus=${WORDPRESS_CPUS} \
 	--cgroup-parent=/podman-group.slice \
-	docker.io/wordpress:7.1.4-php8.5-fpm
+	docker.io/wordpress:7.1.5-php8.5-fpm
 
 start-db:
 	- mkdir -p ./deployment/data/mariadb/data
@@ -55,7 +33,7 @@ start-db:
 	--memory=${DB_MEMORY} \
 	--cpus=${DB_CPUS} \
 	--cgroup-parent=/podman-group.slice \
-	docker.io/mariadb:12.1.2
+	docker.io/mariadb:13.0.2
 
 start-nginx:
 	- bash -c "set -a; . .env; set +a; envsubst '\$$BASE_URL' < ./deployment/configs/nginx/nginx_env.conf > ./deployment/configs/nginx/nginx.conf"
@@ -81,7 +59,7 @@ start-nginx:
 	--memory=${NGINX_MEMORY} \
 	--cpus=${NGINX_CPUS} \
 	--cgroup-parent=/podman-group.slice \
-	docker.io/nginx:1.27.3
+	docker.io/nginx:1.31.9
 
 start-nginx-certbot:
 	- bash -c "set -a; . .env; set +a; envsubst '\$$BASE_URL' < ./deployment/configs/nginx/certbot_env.conf > ./deployment/configs/nginx/nginx.conf"
@@ -100,7 +78,7 @@ start-nginx-certbot:
 	--memory=${NGINX_MEMORY} \
 	--cpus=${NGINX_CPUS} \
 	--cgroup-parent=/podman-group.slice \
-	docker.io/nginx:1.27.3
+	docker.io/nginx:1.31.9
 
 start-nginx-local:
 	- bash -c "set -a; . .env; set +a; envsubst '\$$BASE_URL' < ./deployment/configs/nginx/local_env.conf > ./deployment/configs/nginx/nginx.conf"
@@ -121,7 +99,7 @@ start-nginx-local:
 	--restart unless-stopped \
 	--memory=${NGINX_MEMORY} \
 	--cpus=${NGINX_CPUS} \
-	docker.io/nginx:1.27.3
+	docker.io/nginx:1.31.9
 
 start-fail2ban:
 	systemctl start fail2ban
@@ -174,4 +152,4 @@ start-easyappointments-db:
 	--memory=${EA_DB_MEMORY} \
 	--cpus=${EA_DB_CPUS} \
 	--cgroup-parent=/podman-group.slice \
-	docker.io/mariadb:12.1.2
+	docker.io/mariadb:13.0.2

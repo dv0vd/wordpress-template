@@ -3,6 +3,21 @@ set -e # stop script on any error
 
 
 
+configure_dns() {
+  log "Configuring DNS..."
+  rm -f /etc/resolv.conf
+  echo "nameserver 77.88.8.8" > /etc/resolv.conf
+  echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+  echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+  log "DNS successfully configured"
+}
+
+configure_git() {
+  log "Configuring git..."
+  git config --local core.filemode false || true
+  log "Git successfully configured"
+}
+
 configure_fail2ban() {
   log "Configuring fail2ban..."
   make -C /root/wordpress fail2ban-configure
@@ -14,21 +29,16 @@ configure_fail2ban() {
 configure_nginx() {
   log "Configuring nginx..."
   htpasswd -cb /root/wordpress/deployment/configs/nginx/.htpasswd $NGINX_BASIC_AUTH_USERNAME $NGINX_BASIC_AUTH_PASSWORD
+  make -C /root/dv0vd certbot-issue
   log "Nginx successfully configured"
-}
-
-issue_certificates() {
-  log "Issuing Let's Encrypt certificates..."
-  make -C /root/wordpress certbot-issue
-  log "Let's Encrypt certificates successfully issued"
 }
 
 configure_ssh() {
   log "Configuring SSH..."
   echo "$SSH_PUBLIC_KEY" >> /root/.ssh/authorized_keys
-  touch /etc/ssh/sshd_config.d/00-wordpress.conf
-  echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config.d/00-wordpress.conf
-  echo Port $SSH_PORT >> /etc/ssh/sshd_config.d/00-wordpress.conf
+  make -C /root/dv0vd ssh-generate-config
+  envsubst < ./deployment/configs/ssh/ssh_env.conf > /root/.ssh/config
+  chmod 600 /root/.ssh/config
   log "SSH successfully generated"
 }
 
@@ -40,6 +50,9 @@ configure_podman() {
   systemctl enable podman
   systemctl start podman
   podman system prune --all -f
+  make -C /root/dv0vd podman-pull-images
+  make -C /root/dv0vd podman-load-images
+  make -C /root/dv0vd podman-create-network
   systemctl set-property podman-group.slice MemoryMax=$PODMAN_MEMORY_LIMIT CPUQuota=$PODMAN_CPUS
   systemctl stop systemd-resolved || true # required for Pi-hole 
   systemctl disable systemd-resolved || true # required for Pi-hole
@@ -114,6 +127,7 @@ set_timezone() {
 load_env
 set_timezone
 install_packages
+configure_git
 configure_ssh
 configure_podman
 if [ "$BACKUP_ENABLED" = "true" ]; then
@@ -122,6 +136,4 @@ else
   log "Backup is disabled. Skipping rclone configuration"
 fi
 configure_nginx
-issue_certificates
-configure_fail2ban
 finish

@@ -2,13 +2,16 @@ on-startup:
 	- systemctl disable fail2ban
 	- $(MAKE) stop-fail2ban
 	- $(MAKE) iptables-apply-rules
-	- bash -c 'set -a; . .env; set +a; envsubst "\$$SSH_PORT" < ./deployment/configs/iptables/iptables_env.sh > ./deployment/configs/iptables/iptables.sh'
-	- chmod +x ./deployment/configs/iptables/iptables.sh && ./deployment/configs/iptables/iptables.sh
+	- $(MAKE) ssh-generate-config
 	- shutdown -r 0:00
 	- $(MAKE) fail2ban-configure
 	- $(MAKE) start-fail2ban
 	- $(MAKE) logs-clear
 	- rm -rf /var/tmp/*
 	- systemctl set-property podman-group.slice MemoryMax=${PODMAN_MEMORY_LIMIT} CPUQuota=${PODMAN_CPUS}
-	- $(MAKE) restart
+	- $(MAKE) podman-cleanup
+	- $(MAKE) podman-load-images
+	- $(MAKE) podman-create-network
 	- $(MAKE) certbot-renew
+	- $(MAKE) stop
+	- $(MAKE) restart-containers

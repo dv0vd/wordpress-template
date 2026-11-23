@@ -4,18 +4,12 @@ Template for deploying a WordPress website with MariaDB, Nginx, Fail2ban, SSH ha
 
 ## Getting started
 1) Update packages index: `apt update`.
-2) Install git: `apt install git`.
+2) Install git: `apt install git -y`.
 3) Copy storage-vps SSH private key to `/root/.ssh/vps-storage` for storage vps backups. (optional, only when `BACKUP_ENABLED=true`)
-4) Clone repo: `git clone https://github.com/dv0vd/wordpress-template.git wordpress`.
+4) Clone repo: `git clone -c core.filemode=false https://github.com/dv0vd/wordpress-template.git wordpress`.
 5) Go to the project directory: `cd ./wordpress`.
 6) Configure the `.env` file.
-7) Copy Podman images to `./deployment/images`:
-- wordpress_7.0.2-php8.5-fpm.tar
-- mariadb_12.1.2.tar
-- nginx_1.27.3.tar
-- certbot_5.3.1.tar
-- alextselegidis-easyappointments_1.6.0.tar (optional, only when `EA_ENABLE=true`)
-8) Run the initialization script `chmod +x ./deployment/init.sh && ./deployment/init.sh`.
+7) Run the initialization script `chmod +x ./deployment/scripts/init.sh && ./deployment/scripts/init.sh`.
 
 ## Old website redirect (optional)
 Redirects requests of a previously used domain to the current one. `OLD_BASE_URL` — old host without scheme, e.g. `old-example.com`. The redirect works only if the variable is specified.

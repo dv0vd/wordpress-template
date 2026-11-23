@@ -1,65 +1,83 @@
 GREEN='\033[1;32m'
 WHITE='\033[1;37m'
 RESET='\033[0m'
+HELP_TARGET_WIDTH=49
+
+print-help = @printf ${GREEN}'%-$(HELP_TARGET_WIDTH)s'${WHITE}'— %s'${RESET}'\n' '$(1)' '$(2)'
+
 help:
-	@echo ${GREEN}start'                                   '${WHITE}— start application containers${RESET}
-	@echo ${GREEN}start-local'                             '${WHITE}— start application containers locally${RESET}
-	@echo ${GREEN}start-db'                                '${WHITE}— start database${RESET}
-	@echo ${GREEN}start-nginx'                             '${WHITE}— start nginx server${RESET}
-	@echo ${GREEN}start-nginx-local'                       '${WHITE}— start local nginx server${RESET}
-	@echo ${GREEN}start-wordpress'                         '${WHITE}— start wordpress${RESET}
-	@echo ${GREEN}start-fail2ban'                          '${WHITE}— start fail2ban${RESET}
-	@echo ${GREEN}configure-nginx-local'                   '${WHITE}— configure local nginx basic auth and TLS certificate${RESET}
-	@echo ${GREEN}stop'                                    '${WHITE}— stop application containers${RESET}
-	@echo ${GREEN}stop-db'                                 '${WHITE}— stop database${RESET}
-	@echo ${GREEN}stop-nginx'                              '${WHITE}— stop nginx server${RESET}
-	@echo ${GREEN}stop-wordpress'                          '${WHITE}— stop wordpress${RESET}
-	@echo ${GREEN}stop-fail2ban'                           '${WHITE}— stop fail2ban${RESET}
-	@echo ${GREEN}restart'                                 '${WHITE}— restart application containers${RESET}
-	@echo ${GREEN}restart-local'                           '${WHITE}— restart application containers locally${RESET}
-	@echo ${GREEN}restart-db'                              '${WHITE}— restart database${RESET}
-	@echo ${GREEN}restart-nginx'                           '${WHITE}— restart nginx server${RESET}
-	@echo ${GREEN}restart-nginx-local'                     '${WHITE}— restart local nginx server${RESET}
-	@echo ${GREEN}restart-wordpress'                       '${WHITE}— restart wordpress${RESET}
-	@echo ${GREEN}restart-fail2ban'                        '${WHITE}— restart fail2ban${RESET}
-	@echo ${GREEN}logs-clear'                              '${WHITE}— clear journalctl logs older than 1 day${RESET}
-	@echo ${GREEN}logs-db'                                 '${WHITE}— get database logs${RESET}
-	@echo ${GREEN}logs-nginx'                              '${WHITE}— get nginx logs${RESET}
-	@echo ${GREEN}logs-nginx-access'                       '${WHITE}— get nginx access logs${RESET}
-	@echo ${GREEN}logs-nginx-error'                        '${WHITE}— get nginx error logs${RESET}
-	@echo ${GREEN}logs-wordpress'                          '${WHITE}— get wordpress logs${RESET}
-	@echo ${GREEN}logs-auth'                               '${WHITE}— get SSH connection attempts logs${RESET}
-	@echo ${GREEN}logs-init'                               '${WHITE}— get init logs${RESET}
-	@echo ${GREEN}logs-startup'                            '${WHITE}— get startup logs${RESET}
-	@echo ${GREEN}logs-fail2ban'                           '${WHITE}— get fail2ban logs${RESET}
-	@echo ${GREEN}fail2ban-status'                         '${WHITE}— get fail2ban jails status${RESET}
-	@echo ${GREEN}fail2ban-unban-all'                      '${WHITE}— unban all IPs in fail2ban${RESET}
-	@echo ${GREEN}podman-load-images'                      '${WHITE}— load images from local copy${RESET}
-	@echo ${GREEN}podman-cleanup'                          '${WHITE}— clean all podman resources${RESET}
-	@echo ${GREEN}podman-create-network'                   '${WHITE}— create custom podman network with ipv6 support${RESET}
-	@echo ${GREEN}podman-stats'                            '${WHITE}— get containers stats${RESET}
-	@echo ${GREEN}podman-info'                             '${WHITE}— get containers list with info${RESET}
-	@echo ${GREEN}podman-resources'                        '${WHITE}— get podman resource limits and usage${RESET}
-	@echo ${GREEN}on-startup'                              '${WHITE}— commands to execute immediately after server startup${RESET}
-	@echo ${GREEN}fail2ban-configure'                      '${WHITE}— configure fail2ban${RESET}
-	@echo ${GREEN}certbot-issue'                           '${WHITE}— issue certbot certificates${RESET}
-	@echo ${GREEN}certbot-issue-website'                   '${WHITE}— issue website certbot certificates${RESET}
-	@echo ${GREEN}certbot-renew'                           '${WHITE}— renew certbot certificates${RESET}
-	@echo ${GREEN}certbot-delete-certificate'              '${WHITE}— delete certbot certificate by URL${RESET}
-	@echo ${GREEN}enter-db'                                '${WHITE}— enter database container${RESET}
-	@echo ${GREEN}enter-nginx'                             '${WHITE}— enter nginx container${RESET}
-	@echo ${GREEN}enter-wordpress'                         '${WHITE}— enter wordpress container${RESET}
-	@echo ${GREEN}enter-easyappointments'                  '${WHITE}— enter easyappointments container${RESET}
-	@echo ${GREEN}enter-easyappointments-db'               '${WHITE}— enter easyappointments database container${RESET}
-	@echo ${GREEN}start-easyappointments'                  '${WHITE}— start Easy!Appointments${RESET}
-	@echo ${GREEN}start-easyappointments-db'               '${WHITE}— start Easy!Appointments database${RESET}
-	@echo ${GREEN}stop-easyappointments'                   '${WHITE}— stop Easy!Appointments${RESET}
-	@echo ${GREEN}stop-easyappointments-db'                '${WHITE}— stop Easy!Appointments database${RESET}
-	@echo ${GREEN}restart-easyappointments'                '${WHITE}— restart Easy!Appointments${RESET}
-	@echo ${GREEN}restart-easyappointments-db'             '${WHITE}— restart Easy!Appointments database${RESET}
-	@echo ${GREEN}logs-easyappointments'                   '${WHITE}— get Easy!Appointments logs${RESET}
-	@echo ${GREEN}logs-easyappointments-db'                '${WHITE}— get Easy!Appointments database logs${RESET}
-	@echo ${GREEN}easyappointments-backup-db'               '${WHITE}— dump Easy!Appointments database${RESET}
-	@echo ${GREEN}easyappointments-restore-db'              '${WHITE}— restore Easy!Appointments database from dump${RESET}
-	@echo ${GREEN}easyappointments-backup-to-storage-vps'   '${WHITE}— back up Easy!Appointments database to storage VPS${RESET}
-	@echo ${GREEN}easyappointments-restore-from-storage-vps' '${WHITE}— download Easy!Appointments database dump from storage VPS${RESET}
+	$(call print-help,start,start application containers)
+	$(call print-help,start-local,start application containers locally)
+	$(call print-help,start-db,start database)
+	$(call print-help,start-wordpress,start wordpress)
+	$(call print-help,start-nginx,start nginx server)
+	$(call print-help,start-nginx-certbot,start nginx server for certbot)
+	$(call print-help,start-nginx-local,start local nginx server)
+	$(call print-help,start-fail2ban,start fail2ban)
+	$(call print-help,configure-nginx-local,configure local nginx basic auth and TLS certificate)
+	$(call print-help,ssh-generate-config,generate SSH server configuration)
+	$(call print-help,stop,stop application containers)
+	$(call print-help,stop-db,stop database)
+	$(call print-help,stop-wordpress,stop wordpress)
+	$(call print-help,stop-nginx,stop nginx server)
+	$(call print-help,stop-fail2ban,stop fail2ban)
+	$(call print-help,restart,restart application containers)
+	$(call print-help,restart-local,restart application containers locally)
+	$(call print-help,restart-db,restart database)
+	$(call print-help,restart-wordpress,restart wordpress)
+	$(call print-help,restart-nginx,restart nginx server)
+	$(call print-help,restart-nginx-local,restart local nginx server)
+	$(call print-help,restart-fail2ban,restart fail2ban)
+	$(call print-help,logs-clear,clear journalctl logs older than 1 day)
+	$(call print-help,logs-db,get database logs)
+	$(call print-help,logs-wordpress,get wordpress logs)
+	$(call print-help,logs-nginx,get nginx logs)
+	$(call print-help,logs-nginx-access,get nginx access logs)
+	$(call print-help,logs-nginx-error,get nginx error logs)
+	$(call print-help,logs-auth,get SSH connection attempts logs)
+	$(call print-help,logs-init,get init logs)
+	$(call print-help,logs-startup,get startup logs)
+	$(call print-help,logs-fail2ban,get fail2ban logs)
+	$(call print-help,logs-easyappointments,get Easy!Appointments logs)
+	$(call print-help,logs-easyappointments-db,get Easy!Appointments database logs)
+	$(call print-help,enter-db,enter database container)
+	$(call print-help,enter-wordpress,enter wordpress container)
+	$(call print-help,enter-nginx,enter nginx container)
+	$(call print-help,enter-easyappointments,enter Easy!Appointments container)
+	$(call print-help,enter-easyappointments-db,enter Easy!Appointments database container)
+	$(call print-help,fail2ban-configure,configure fail2ban)
+	$(call print-help,fail2ban-status,get fail2ban jails status)
+	$(call print-help,fail2ban-unban-all,unban all IPs in fail2ban)
+	$(call print-help,podman-pull-images,pull and save podman images to local copy)
+	$(call print-help,podman-load-images,load podman images from local copy)
+	$(call print-help,podman-cleanup,clean all podman resources)
+	$(call print-help,podman-create-network,create custom podman network with ipv6 support)
+	$(call print-help,podman-stats,get containers stats)
+	$(call print-help,podman-info,get containers list with info)
+	$(call print-help,podman-resources,get podman resource limits and usage)
+	$(call print-help,certbot-issue,issue certbot certificates)
+	$(call print-help,certbot-issue-website,issue website certbot certificates)
+	$(call print-help,certbot-issue-old-website,issue old website certbot certificates)
+	$(call print-help,certbot-issue-easyappointments,issue Easy!Appointments certbot certificates)
+	$(call print-help,certbot-renew,renew certbot certificates)
+	$(call print-help,certbot-delete-certificate,delete certbot certificate by URL)
+	$(call print-help,iptables-apply-rules,apply iptables firewall rules)
+	$(call print-help,iptables-rules-filter,list IPv4 filter table rules)
+	$(call print-help,iptables-rules-nat,list IPv4 nat table rules)
+	$(call print-help,iptables-rules-raw,list IPv4 raw table rules)
+	$(call print-help,iptables-rules-mangle,list IPv4 mangle table rules)
+	$(call print-help,ip6tables-rules-filter,list IPv6 filter table rules)
+	$(call print-help,ip6tables-rules-nat,list IPv6 nat table rules)
+	$(call print-help,ip6tables-rules-raw,list IPv6 raw table rules)
+	$(call print-help,ip6tables-rules-mangle,list IPv6 mangle table rules)
+	$(call print-help,on-startup,commands to execute immediately after server startup)
+	$(call print-help,start-easyappointments,start Easy!Appointments)
+	$(call print-help,start-easyappointments-db,start Easy!Appointments database)
+	$(call print-help,stop-easyappointments,stop Easy!Appointments)
+	$(call print-help,stop-easyappointments-db,stop Easy!Appointments database)
+	$(call print-help,restart-easyappointments,restart Easy!Appointments)
+	$(call print-help,restart-easyappointments-db,restart Easy!Appointments database)
+	$(call print-help,easyappointments-backup-db,dump Easy!Appointments database)
+	$(call print-help,easyappointments-restore-db,restore Easy!Appointments database from dump)
+	$(call print-help,easyappointments-backup-to-storage-vps,back up Easy!Appointments database to storage VPS)
+	$(call print-help,easyappointments-restore-from-storage-vps,download Easy!Appointments database dump from storage VPS)

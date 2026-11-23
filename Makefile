@@ -17,3 +17,5 @@ include ./make/hooks.mk
 include ./make/common.mk
 include ./make/iptables.mk
 include ./make/easyappointments.mk
+include ./make/containers.mk
+include ./make/images.mk

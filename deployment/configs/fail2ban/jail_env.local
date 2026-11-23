@@ -31,7 +31,7 @@ enabled  = true
 logpath  = %(nginx_access_log)s
 
 [nginx-bad-request]
-enabled = true
+enabled = false
 logpath = %(nginx_access_log)s
 
 [nginx-not-found]

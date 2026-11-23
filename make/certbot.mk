@@ -1,6 +1,4 @@
 certbot-issue:
-	- $(MAKE) podman-load-images
-	- $(MAKE) podman-create-network
 	- $(MAKE) start-nginx-certbot
 	- $(MAKE) certbot-issue-website
 	- $(MAKE) certbot-issue-old-website
@@ -17,7 +15,7 @@ certbot-issue-website:
 		--network podman_network \
 		-v ./deployment/data/letsencrypt/data:/etc/letsencrypt \
 		-v ./deployment/data/letsencrypt/acme:/app/acme \
-		docker.io/certbot/certbot:v5.3.1 certonly \
+		docker.io/certbot/certbot:v5.10.0 certonly \
 		--webroot \
 		--webroot-path=/app/acme \
 		-d ${BASE_URL} \
@@ -35,7 +33,7 @@ certbot-issue-old-website:
 			--network podman_network \
 			-v ./deployment/data/letsencrypt/data:/etc/letsencrypt \
 			-v ./deployment/data/letsencrypt/acme:/app/acme \
-			docker.io/certbot/certbot:v5.3.1 certonly \
+			docker.io/certbot/certbot:v5.10.0 certonly \
 			--webroot \
 			--webroot-path=/app/acme \
 			-d ${OLD_BASE_URL} \
@@ -53,7 +51,7 @@ certbot-issue-easyappointments:
 		--network podman_network \
 		-v ./deployment/data/letsencrypt/data:/etc/letsencrypt \
 		-v ./deployment/data/letsencrypt/acme:/app/acme \
-		docker.io/certbot/certbot:v5.3.1 certonly \
+		docker.io/certbot/certbot:v5.10.0 certonly \
 		--webroot \
 		--webroot-path=/app/acme \
 		-d ${EA_URL}.${BASE_URL} \
@@ -62,6 +60,7 @@ certbot-issue-easyappointments:
 		--no-eff-email
 
 certbot-renew:
+	- $(MAKE) start-nginx-certbot
 	- podman rm certbot
 	podman run \
 		--rm \
@@ -69,7 +68,8 @@ certbot-renew:
 		--network podman_network \
 		-v ./deployment/data/letsencrypt/data:/etc/letsencrypt \
 		-v ./deployment/data/letsencrypt/acme:/app/acme \
-		docker.io/certbot/certbot:v5.3.1 renew
+		docker.io/certbot/certbot:v5.10.0 renew
+	- $(MAKE) stop-nginx-certbot
 
 certbot-delete-certificate:
 	- podman rm certbot
@@ -79,5 +79,5 @@ certbot-delete-certificate:
 		--network podman_network \
 		-v ./deployment/data/letsencrypt/data:/etc/letsencrypt \
 		-v ./deployment/data/letsencrypt/acme:/app/acme \
-		docker.io/certbot/certbot:v5.3.1 delete \
+		docker.io/certbot/certbot:v5.10.0 delete \
 		--cert-name ${URL}
