@@ -29,14 +29,14 @@ configure_fail2ban() {
 configure_nginx() {
   log "Configuring nginx..."
   htpasswd -cb /root/wordpress/deployment/configs/nginx/.htpasswd $NGINX_BASIC_AUTH_USERNAME $NGINX_BASIC_AUTH_PASSWORD
-  make -C /root/dv0vd certbot-issue
+  make -C /root/wordpress certbot-issue
   log "Nginx successfully configured"
 }
 
 configure_ssh() {
   log "Configuring SSH..."
   echo "$SSH_PUBLIC_KEY" >> /root/.ssh/authorized_keys
-  make -C /root/dv0vd ssh-generate-config
+  make -C /root/wordpress ssh-generate-config
   envsubst < ./deployment/configs/ssh/ssh_env.conf > /root/.ssh/config
   chmod 600 /root/.ssh/config
   log "SSH successfully generated"
@@ -50,9 +50,9 @@ configure_podman() {
   systemctl enable podman
   systemctl start podman
   podman system prune --all -f
-  make -C /root/dv0vd podman-pull-images
-  make -C /root/dv0vd podman-load-images
-  make -C /root/dv0vd podman-create-network
+  make -C /root/wordpress podman-pull-images
+  make -C /root/wordpress podman-load-images
+  make -C /root/wordpress podman-create-network
   systemctl set-property podman-group.slice MemoryMax=$PODMAN_MEMORY_LIMIT CPUQuota=$PODMAN_CPUS
   systemctl stop systemd-resolved || true # required for Pi-hole 
   systemctl disable systemd-resolved || true # required for Pi-hole
