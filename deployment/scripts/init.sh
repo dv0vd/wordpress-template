@@ -37,8 +37,8 @@ configure_ssh() {
   log "Configuring SSH..."
   echo "$SSH_PUBLIC_KEY" >> /root/.ssh/authorized_keys
   make -C /root/wordpress ssh-generate-config
-  envsubst < ./deployment/configs/ssh/ssh_env.conf > /root/.ssh/config
-  chmod 600 /root/.ssh/config
+  # envsubst < ./deployment/configs/ssh/ssh_env.conf > /root/.ssh/config
+  # chmod 600 /root/.ssh/config
   log "SSH successfully generated"
 }
 
